@@ -1,0 +1,39 @@
+{{ services.lastSeen.setLastSeenMaxCount(config("Ceres.item.lists.last_seen_number")) }}
+
+{{ component( "Hermko::Item.Components.VariationSelect" ) }}
+{{ component( "Hermko::Item.Components.ItemImageCarousel" ) }}
+{{ component( "Hermko::Item.Components.AddToWishList" ) }}
+{{ component( "Hermko::Item.Components.SingleItem" ) }}
+{{ component( "Hermko::Basket.Components.AddToBasket" ) }}
+{{ component( "Hermko::ItemList.Components.CategoryItem" ) }}
+
+{{ component( "Ceres::Item.Components.OrderProperties" ) }}
+{{ component( "Ceres::Item.Components.OrderPropertyList" ) }}
+{{ component( "Ceres::Item.Components.GraduatedPrices" ) }}
+
+
+<single-item v-cloak template="#vue-single-item" :item-data="{{ item | json_encode }}" :variation-list-data="{{ variations | json_encode }}" :attribute-name-map="{{attributeNameMap | json_encode}}" :variation-units="{{variationUnits | json_encode}}">
+    <div slot="BeforePrice">{{ LayoutContainer.show("Ceres::SingleItem.BeforePrice", item.documents[0].data) }}</div>
+    <div slot="AfterPrice">{{ LayoutContainer.show("Ceres::SingleItem.AfterPrice", item.documents[0].data) }}</div>
+    <div slot="BeforeAddToBasket">{{ LayoutContainer.show("Ceres::SingleItem.BeforeAddToBasket", item.documents[0].data) }}</div>
+    <div slot="AfterAddToBasket">{{ LayoutContainer.show("Ceres::SingleItem.AfterAddToBasket", item.documents[0].data) }}</div>
+    <div slot="AdditionalContentAfterAddToBasket">{{ LayoutContainer.show("Ceres::SingleItem.AdditionalContentAfterAddToBasket", item.documents[0].data) }}</div>
+    <div slot="AdditionalContentAfterVAT">{{ LayoutContainer.show("Ceres::SingleItem.AdditionalContentAfterVAT", item.documents[0].data) }}</div>
+    <template slot="AddDetailTabs">{{ LayoutContainer.show("Ceres::SingleItem.AddDetailTabs", item.documents[0].data) }}</template>
+    <template slot="AddDetailTabsContent">{{ LayoutContainer.show("Ceres::SingleItem.AddDetailTabsContent", item.documents[0].data) }}</template>
+    <div slot="ItemListContainer">{{ LayoutContainer.show("Ceres::SingleItem.ItemListContainer", item) }}</div>
+    <div slot="FeedbackContainer">{{ LayoutContainer.show("Ceres::SingleItem.FeedbackContainer", item) }}</div>
+    <div slot="ImageCarousel">
+        {% set ImageCarouselOverride = LayoutContainer.show("Ceres::SingleItem.ImageCarousel") %}
+        {% if ImageCarouselOverride|trim is empty %}
+            <item-image-carousel image-url-accessor="url" template="#vue-item-image-carousel"></item-image-carousel>
+        {% else %}
+            {{ ImageCarouselOverride }}
+        {% endif %}
+    </div>
+    <div slot="CrossSellingAccessory">
+	     {{ component("Ceres::Containers.Components.ContainerItemList") }}
+       {{ LayoutContainer.show("Ceres::SingleItem.ItemListContainer", accessory) }}
+       <container-item-list :items="{{ accessory| json_encode }}"></container-item-list>
+   </div>
+</single-item>

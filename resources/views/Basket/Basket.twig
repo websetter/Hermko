@@ -1,0 +1,63 @@
+{% extends getPartial('page-design') %}
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+
+{% block PartialHead %}
+  <meta name="robots" content="NOINDEX, NOFOLLOW">
+  <title>{{ trans("Ceres::Template.basket") }}
+    |
+    {{ ceresConfig.header.companyName }}</title>
+{% endblock %}
+
+{% block PageBody %}
+
+  {{ component( "Hermko::Basket.Components.BasketList" ) }}
+  {{ component( "Hermko::Basket.Components.Coupon" ) }}
+  {{ component( "Hermko::Basket.Components.BasketTotals" ) }}
+
+  <div v-cloak="v-cloak" class="page-content basket container-max" itemtype="http://schema.org/Product http://schema.org/Thing http://schema.org/Offer http://schema.org/PriceSpecification">
+
+    <h1>{{ trans("Ceres::Template.basket") }}</h1>
+
+    <div class="row">
+      <div class="col-md-7">
+        <div class="border">
+          <div class="col-xs-12 p-t-2 bg-white">
+            <h3>Artikel</h3>
+            <basket-list template="#vue-basket-list" size="large"></basket-list>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        {# this container is required for the v-stick-in-parent directive below #}
+      </div>
+
+      <div class="col-md-5 float-right" v-stick-in-parent="v-stick-in-parent">
+        <div class="border">
+          <div class="col-xs-12 p-y-2 bg-white">
+            <h3>Summe</h3>
+            <basket-totals class="m-b-2" template="#vue-basket-totals" :config="{{ ceresConfig.basket.data | json_encode() }}"></basket-totals>
+
+            <hr>
+            <coupon template="#vue-coupon"></coupon>
+            <hr>
+
+            {{ LayoutContainer.show("Ceres::Basket.BeforeCheckoutButton") }}
+            <a v-waiting-animation-infinite="v-waiting-animation-infinite" class="btn btn-primary btn-block" href="/checkout">
+              <i class="fa fa-arrow-right" aria-hidden="true"></i>
+              {{ trans("Ceres::Template.orderCheckout") }}
+            </a>
+            {{ LayoutContainer.show("Ceres::Basket.AfterCheckoutButton") }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% set beforeCouponContainer = LayoutContainer.show("Ceres::Basket.BeforeCoupon") %}
+
+    {% if beforeCouponContainer | trim is not empty %}
+      {{ beforeCouponContainer }}
+      <hr class="m-y-2">
+    {% endif %}
+  </div>
+{% endblock %}

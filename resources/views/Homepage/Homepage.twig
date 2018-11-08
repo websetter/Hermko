@@ -1,0 +1,31 @@
+{% extends getPartial('page-design') %}
+
+{% set showDefaultHomepage = config("Ceres.default.homepage") %}
+{% set companyLogo  = config("Ceres.header.company_logo") %}
+{% set companyName  = "HERMKO" %}
+
+{% block PartialHead %}
+<title>HERMKO - Wäsche zum Verlieben</title>
+    <meta name="description" content="{{ trans('Ceres::Template.homepageMetaDescription') }}">
+    <meta name="robots" content="{{ config("Ceres.meta.robots_home") }}">
+
+    <meta property="og:title" content="{{ companyName }}"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:url" content="{{ services.webstoreConfig.getWebstoreConfig().domainSsl }}"/>
+    <meta property="og:image"
+          content="{% if ('http' in companyLogo) or ('layout/' in companyLogo) %}{{ companyLogo }}{% else %}{{ plugin_path('Ceres') }}/{{ companyLogo }}{% endif %}"/>
+
+    <script type="application/ld+json">
+        {"@context": "http://schema.org","@type": "WebSite","url": "{{ services.webstoreConfig.getWebstoreConfig().domainSsl }}","potentialAction":{"@type": "SearchAction","target": "{{ services.webstoreConfig.getWebstoreConfig().domainSsl }}/search?query={search_term}","query-input": "required name=search_term"}}
+    </script>
+
+
+{% endblock %}
+
+{% block PageBody %}
+
+{% block ThemeHomepage %}
+	 {% include 'Hermko::Homepage.HermkoHomepage.twig' %}
+{% endblock %}
+
+{% endblock %}

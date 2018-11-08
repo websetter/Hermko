@@ -1,0 +1,195 @@
+<!-- Insert markup for default homepage here -->
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+
+{% set overrideHomepageContainer = "" %}
+{% for content in container("Ceres::Homepage") if content.plugin != "Plenty" %}
+    {% set overrideHomepageContainer = overrideHomepageContainer ~ content.result %}
+{% endfor %}
+{% if overrideHomepageContainer | trim is empty %}
+
+  {% set lang = services.sessionStorage.getLang() %}
+  {% set category1 = services.category.get(config("Ceres.homepage.homepageCategory1"), lang) %}
+    {% set category2 = services.category.get(config("Ceres.homepage.homepageCategory2"), lang) %}
+    {% set category3 = services.category.get(config("Ceres.homepage.homepageCategory3"), lang) %}
+    {% set category4 = services.category.get(config("Ceres.homepage.homepageCategory4"), lang) %}
+    {% set category5 = services.category.get(config("Ceres.homepage.homepageCategory5"), lang) %}
+    {% set category6 = services.category.get(config("Ceres.homepage.homepageCategory6"), lang) %}
+
+
+    {% set paginatedCategoryList1 =
+    services.itemLoader.loadForTemplate(
+    'Ceres::ItemList.ItemListView',
+    itemLoaderPresets.categoryList,
+    {'categoryId': category3.id, 'page':1, 'items':3, 'sorting': itemSort}) %}
+
+    {% set paginatedCategoryList2 =
+    services.itemLoader.loadForTemplate(
+    'Ceres::ItemList.ItemListView',
+    itemLoaderPresets.categoryList,
+    {'categoryId': category6.id, 'page':1, 'items':3, 'sorting': itemSort}) %}
+
+    {% set categoryList1 = paginatedCategoryList1.documents %}
+    {% set categoryList2 = paginatedCategoryList2.documents %}
+
+
+  {{ component( "Ceres::ItemList.Components.ItemList") }}
+  {{ component( "Ceres::ItemList.Components.CategoryImageCarousel") }}
+  {{ component( "Ceres::Basket.Components.AddToBasket" ) }}
+
+
+
+<div class="row" id="slider">
+  <div class="col-xs-12 col-lg-8 padding-0">
+    <div id="homeSlider" class="carousel slide" data-ride="carousel" data-interval="8000" data-transition="fade">
+      <div class="carousel-inner">
+        {% if categorySlider is not defined %}
+          {% set categorySlider = services.category.get(410, lang) %}
+        {% endif %}
+
+        {{ categorySlider.details.first.description | raw }}
+      </div>
+      <a class="carousel-control-prev" href="#homeSlider" role="button" data-slide="prev">
+        <span class="fa fa-angle-left" aria-hidden="true"></span>
+        <span class="sr-only">Zurück</span>
+      </a>
+      <a class="carousel-control-next" href="#homeSlider" role="button" data-slide="next">
+        <span class="fa fa-angle-right" aria-hidden="true"></span>
+        <span class="sr-only">Weiter</span>
+      </a>
+    </div>
+</div>
+    <div class="col-xs-12 col-lg-4 padding-0 heightFull">
+      <div id="shopInfo">
+        <div class="text">
+        {{ categorySlider.details.first.description2 | raw }}
+        </div>
+      </div>
+
+    </div>
+</div>
+
+  <div class="home container-max">
+    <div class="row boxenHome">
+      <div class="col-xs-12 col-sm-6 col-lg-4">
+        <div class="infoBox">
+          <h2>Eigenproduktion</h2>
+          <img src="https://www.hermko.de/images/gallery/template/ceres/hermko-eigenproduktion.jpg" alt="Eigenproduktion">
+          <a href="https://www.hermko.de/content/aus-eigener-produktion/" title="Zur Eigenproduktion">Jetzt Informieren</a>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-lg-4">
+        <div class="infoBox">
+          <h2>News / Aktuelles</h2>
+          <img src="https://www.hermko.de/images/gallery/template/ceres/hermko-news.jpg" alt="News">
+          <a href="https://www.hermko.de/content/news/" title="Zu unseren News">Jetzt Informieren</a>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-lg-4">
+        <div class="infoBox">
+          <h2>Fabrikverkauf</h2>
+          <img src="https://www.hermko.de/images/gallery/template/ceres/hermko-fabrikverkauf.jpg" alt="Fabrikverkauf">
+          <a href="https://www.hermko.de/content/fabrikverkauf/" title="Zum Fabrikverkauf">Jetzt Informieren</a>
+        </div>
+      </div>
+    </div>
+
+
+      {% set homepageContainer6 = LayoutContainer.show("Ceres::Homepage.Container6") %}
+
+      {% if category is not defined %}
+        {% set categoryStart  = services.category.get(411, lang) %}
+      {% endif %}
+
+      {% if startArtikel is not defined %}
+        {% set startArtikel = services.category.get(412, lang) %}
+      {% endif %}
+
+
+      {{ startArtikel.details.first.description | raw }}
+
+      {{ startArtikel.details.first.description2 | raw }}
+
+<!--
+      {% set homepageContainer6 = LayoutContainer.show("Ceres::Homepage.Container6") %}
+      {% if categoryList1 is not empty or homepageContainer6 | trim is not empty %}
+          <div class="topProdukte clearfix">
+              {% if homepageContainer6 | trim is empty %}
+
+                  <ul class="product-list  grid">
+                    <li class="first col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                      <div class="border">
+                        <h2>Top Produkte</h2>
+                        <div class="category-description">
+                            {{ categoryStart.details.first.description | raw }}
+                        </div>
+                      </div>
+                    </li>
+                      {% for item in categoryList1 %}
+                          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                              {% include "Ceres::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
+                          </li>
+                      {% endfor %}
+                  </ul>
+              {% else %}
+                  {{ homepageContainer6 }}
+              {% endif %}
+          </div>
+      {% endif %}
+
+        {% set homepageContainer9 = LayoutContainer.show("Ceres::Homepage.Container9") %}
+        {% if categoryList2 is not empty or homepageContainer9 | trim is not empty %}
+            <div class="neuheiten clearfix">
+                {% if homepageContainer9 | trim is empty %}
+
+
+                    <ul class="product-list grid">
+                      <li class="first col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                        <div class="border">
+                          <h2>Neue Produkte</h2>
+                          <div class="category-description">
+                              {{ categoryStart.details.first.description2 | raw }}
+                          </div>
+                        </div>
+                      </li>
+                        {% for item in categoryList2 %}
+                              <li class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                {% include "Ceres::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ homepageContainer9 }}
+                {% endif %}
+            </div>
+        {% endif %}
+
+-->
+
+    <div class="SEO">
+      {% if category is not defined %}
+        {% set lang = services.sessionStorage.getLang() %}
+        {% set category = services.category.get(130, lang) %}
+      {% endif %}
+
+      {{ category.details.first.description | raw }}
+
+    </div>
+    <div class="newsletter">
+      {% if categoryNews is not defined %}
+        {% set categoryNews = services.category.get(409, lang) %}
+      {% endif %}
+
+      {{ categoryNews.details.first.description | raw }}
+
+    </div>
+
+    <p class="center">
+      *
+      {{ trans("Ceres::Template.itemInclVAT") }}
+      {{ trans("Ceres::Template.itemExclusive") }}
+      <a href="hermko/versandkosten" title="{{ trans("Ceres::Template.itemShippingCosts") }}">{{ trans("Ceres::Template.itemShippingCosts") }}</a>
+    </p>
+  </div>
+{% else %}
+  {{ overrideHomepageContainer }}
+{% endif %}

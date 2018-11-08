@@ -1,0 +1,40 @@
+{
+    "version"           :   "1.0.0",
+    "license"           :   "AGPL-3.0",
+    "name"              :   "Hermko",
+    "marketplaceName"   :   {"de":"Ceres Hermko","en":"Ceres Hermko"},
+    "pluginIcon"        :   "icon_plugin_xs.png",
+    "description"       :   "Theme für Hermko.",
+    "shortDescription"  :   { "de": "Theme für Ceres.", "en": "Theme for Ceres." },
+    "namespace"         :   "Hermko",
+    "author"            :   "werk38",
+    "keywords"          :   ["plugins", "layout", "theme", "ceres"],
+    "price"             :   0,
+    "categories"        :   [3518],
+    "type"              :   "theme",
+    "require"           :   ["Ceres"],
+    "serviceProvider"   :   "Hermko\\Providers\\HermkoServiceProvider",
+    "dataProviders"     :
+    [
+        {
+            "key"           :"Hermko\\Containers\\HermkoContainer",
+            "name"          :"Stylesheet",
+            "description"   :"Add changes to the CSS file"
+        },
+        {
+            "key"           :"Hermko\\Containers\\HermkoItemListContainer1",
+            "name"          :"First item list",
+            "description"   :"Display a configurable list of items in your online store"
+        },
+        {
+            "key"           :"Hermko\\Containers\\HermkoItemListContainer2",
+            "name"          :"Second item list",
+            "description"   :"Display a configurable list of items in your online store"
+        },
+        {
+            "key"           :"Hermko\\Containers\\HermkoItemListContainer3",
+            "name"          :"Third item list",
+            "description"   :"Display a configurable list of items in your online store"
+        }
+    ]
+}

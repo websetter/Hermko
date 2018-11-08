@@ -1,0 +1,19 @@
+<script type="x/template" id="vue-variation-select">
+    <div>
+        <div class="isSelect" v-for="(attribute, attributeId) in attributes">
+            <div class="input-unit">
+                <select class="custom-select text-gray-dark" v-model="selectedAttributes[attributeId]" @change="onSelectionChange(selectedAttributes[attributeId])">
+                        <option name="choose" value="select">{{ trans("Ceres::Template.singleItemPleaseSelect") }}</option>
+                        <option
+                            v-for="(attributeValue, attributeValueId) in attribute.values"
+                            :value="attributeValueId"
+                            :name="attributeValueId"
+                            :disabled="!isEnabled(attributeId, attributeValueId)">
+                            ${ attributeValue }
+                        </option>
+                </select>
+                <label>${ attribute.name }</label>
+            </div>
+        </div>
+    </div>
+</script>

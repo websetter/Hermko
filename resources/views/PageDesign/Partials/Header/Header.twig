@@ -1,0 +1,126 @@
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+
+{{ component( "Hermko::Customer.Components.UserLoginHandler" ) }}
+{{ component( "Ceres::PageDesign.Components.ShippingCountrySelect" ) }}
+{{ component( "Ceres::PageDesign.Components.MobileNavigation" ) }}
+{{ component( "Ceres::ItemList.Components.ItemSearch" ) }}
+{{ component( "Ceres::WishList.Components.WishListCount" ) }}
+{{ component( "Ceres::Basket.Components.BasketPreviewHover" ) }}
+
+{% set lang = services.sessionStorage.getLang() %}
+{% set enabledRoutes = config("IO.routing.enabled_routes") | split(', ') %}
+{% set activeCurrencies = config("Ceres.currency.available_currencies") | split(', ') %}
+{% set enableCurrencySelect = config("Ceres.currency.enable_selection") == "true" and activeCurrencies | length > 0 %}
+{% set currencyFormat = config("Ceres.currency.format") %}
+{% set currencyFormatSelect = config("Ceres.currency.format_selection") %}
+
+{% set companyLogo  = config("Ceres.header.company_logo") %}
+{% set lang         = services.sessionStorage.getLang() %}
+{% set showHeaderNavBar = config("Ceres.header.show_navbars") %}
+{% set companyName  = config("Ceres.header.company_name") %}
+{% set useMegaMenu  = config("Ceres.header.megamenu_levels") > 1 %}
+
+<header id="page-header" class="top-bar">
+	<div class="additionalLinks">
+		<ul>
+			<li><a href="https://www.hermko.de/content/fabrikverkauf/" title="zum Fabrikverkauf">Fabrikverkauf</a></li>
+			<li class="divider">|</li>
+			<li><a href="https://www.hermko.de/content/aus-eigener-produktion/" title="zu unserer Produktion">Aus eigener Produktion</a></li>
+			<li class="divider">|</li>
+			<li><a href="https://www.hermko.de/content/materialien/" title="Aus der Natur">Aus der Natur</a></li>
+			<li class="divider">|</li>
+			<li><a href="{{ urls.contact }}" title="zum Kontakt">Kontakt</a></li>
+		</ul>
+	</div>
+	<nav class="navbar{% if useMegaMenu %} megamenu{%endif%}">
+      <div class="container-max">
+         <div class="brand-wrapper" {% if showHeaderNavBar == "side" %}style="position: relative"{% endif %}>
+             <a class="navbar-brand pull-lg-left" href="/">
+                {% if ('http' in companyLogo) or ('layout/' in companyLogo) %}
+                    <img alt="{{ companyName }}" src="{{ companyLogo }}" class="img-fluid"/>
+                {% else %}
+                    <img alt="{{ companyName }}" src="{{ plugin_path('Ceres') }}/{{ companyLogo }}" class="img-fluid"/>
+                {% endif %}
+             </a>
+
+             <button id="btnMainMenuToggler" v-open-mobile-navigation class="navbar-toggler hidden-lg-up" type="button">
+                 &#9776;
+             </button>
+         </div>
+
+        <div id="mainNavbarCollapsable">
+            <ul class="breadcrumb">
+                <li class="btnClose"></li>
+            </ul>
+            {% if showHeaderNavBar == "top" or showHeaderNavBar == "both" or not services.template.isCategory() %}
+                {# includeCached('Ceres::PageDesign.Partials.Header.NavigationList.twig') #}
+                {% include "Hermko::PageDesign.Partials.Header.NavigationList" %}
+            {% endif %}
+            <ul id="controlsList" class="controls-list list-inline">
+			<li class="list-inline-item control-search">
+                <a class="anicon anicon-search-xcross" aria-label="toggle search"
+                        data-toggle="collapse" href="#searchBox"
+                        aria-expanded="{% if services.template.isSearch() %}true{% else %}false{% endif %}"
+                        aria-controls="searchBox"
+                        data-parent="#controlsList">
+                    <span class="fa fa-search" aria-hidden="true"></span>
+                    Suche
+                </a>
+            </li>
+            <li class="list-inline-item control-user">
+                <user-login-handler template="#vue-user-login-handler"
+                        :user-data="{{ services.customer.getContact() | json_encode() }}"></user-login-handler>
+            </li>
+
+						<li class="list-inline-item control-basket">
+							 <a v-toggle-basket-preview href="#" class="toggle-basket-preview">
+									 {% if config("Ceres.header.basket_values") != "sum" %}
+											 <span class="badge-right" v-basket-item-quantity="$store.state.basket.data.itemQuantity">0</span>
+									 {% endif %}
+
+									 <i v-waiting-animation="$store.state.basket.isBasketLoading" waiting-class="fa fa-refresh fa-spin" class="fa fa-shopping-cart" aria-hidden="true"></i>
+									 {% if config("Ceres.header.basket_values") != "quantity" %}
+											 <span class="badge" v-if="!$store.state.basket.showNetPrices" v-basket-item-sum="$store.state.basket.data.itemSum">0,00 {{ services.checkout.getCurrencyData()[currencyFormat] }}</span>
+											 <span class="badge" v-else v-cloak v-basket-item-sum="$store.state.basket.data.itemSumNet">0,00 {{ services.checkout.getCurrencyData()[currencyFormat] }}</span>
+									 {% endif %}
+							 </a>
+
+							 {% if config("Ceres.basket.preview_type") != "right" %}
+									 <basket-preview template="#vue-basket-preview-hover" :show-net-prices="{{ showNetPrices | json_encode }}"></basket-preview>
+							 {% endif %}
+					 </li>
+        </ul>
+        </div>
+    </div>
+		<div class="mobileNavLinks hidden-sm-up">
+			<ul>
+				<li><a href="https://www.hermko.de/damen" title="zu Damen">Damen</a></li>
+				<li><a href="https://www.hermko.de/herren" title="zu Herren">Herren</a></li>
+				<li><a href="https://www.hermko.de/kinder" title="zu Kinder">Kinder</a></li>
+				<li><a href="https://www.hermko.de/funktionsunterwaesche" title="zur Funktionswäsche">Funktionswäsche</a></li>
+			</ul>
+		</div>
+</nav>
+</header>
+
+
+<!-- breadcrumb -->
+{% if not services.template.isHome() and not services.template.isMyAccount() and not services.template.isCheckout() %}
+    {% include "Ceres::PageDesign.Partials.Header.Breadcrumb" %}
+{% endif %}
+
+{% if category.linklist == "Y" %}
+    {% set initialCategory = { id: category.id } %}
+{% else %}
+    {% set initialCategory = category %}
+{% endif %}
+
+<mobile-navigation :navigation-tree-data="{{ categories | json_encode }}" :initial-category="{{ initialCategory | json_encode }}" template="#vue-mobile-navigation"></mobile-navigation>
+
+<div class="container-max page-header">
+    <div class="row">
+			<div id="searchBox" class="cmp cmp-search-box collapse">
+					<item-search template="#vue-item-search"></item-search>
+			</div>
+    </div>
+</div>

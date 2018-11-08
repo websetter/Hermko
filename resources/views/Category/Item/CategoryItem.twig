@@ -1,0 +1,125 @@
+{% extends getPartial('page-design') %}
+{% import "Ceres::Category.Macros.CategoryTree" as Tree %}
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+
+{% block PageBody %}
+
+    {{ component( "Hermko::ItemList.Components.Filter.ItemFilterList") }}
+    {{ component( "Ceres::ItemList.Components.Filter.ItemFilterTagList") }}
+    {{ component( "Hermko::ItemList.Components.ItemList") }}
+    {{ component( "Hermko::ItemList.Components.CategoryImageCarousel") }}
+    {{ component( "Ceres::ItemList.Components.ItemListSorting") }}
+    {{ component( "Ceres::ItemList.Components.ItemsPerPage") }}
+    {{ component( "Ceres::ItemList.Components.Pagination") }}
+    {{ component( "Hermko::ItemList.Components.CategoryItem" ) }}
+
+
+    <div class="categoriegrid page-content container-max cat-{{category.id}}">
+    	<div class="row">
+    		 <div class="col-xs-12 col-sm-3 columnLeft">
+	                <div class="border catDesc">
+	                	<h1 class="h2 category-title">{{ category.details[0].name }}</h1>
+	                    {% if ceresConfig.item.showCategoryDescription %}
+	                        <div id="category-description-container" class="category-description m-b-1">{{ category.details[0].description | raw }}</div>
+	                    {% endif %}
+	                </div>
+			        <div class="list-controls">
+			            <div class="list-controls-inner border">
+		                    <div class="list-wrapper">
+		                        <item-list-sorting template="#vue-item-list-sorting" :sorting-list="{{ searchOptions.sorting | json_encode }}" :default-sorting="{{ searchOptions.defaultSorting | json_encode }}"></item-list-sorting>
+		                        <items-per-page
+		                            template="#vue-items-per-page"
+		                            :pagination-values="{{ searchOptions.itemsPerPage | json_encode }}"></items-per-page>
+			                </div>
+			            </div>
+			            <div class="filter border">
+			            	<item-filter-list :facet-data="{{ facets | json_encode }}"></item-filter-list>
+			            	<item-filter-tag-list></item-filter-tag-list>
+			            </div>
+
+			            {# TAGS #}
+			        </div>
+
+
+			        {% if ceresConfig.header.showNavBars == "side" or ceresConfig.header.showNavBars == "both" %}
+		                <div class="hidden-md-down">
+		                    <div class="sidebar-categories">
+		                        <div class="category-title">{{ trans("Ceres::Template.generalCategories") }}</div>
+		                        {{ include('Ceres::PageDesign.Partials.Header.SideNavigation.twig') }}
+		                    </div>
+
+		                    {{ LayoutContainer.show("Ceres::CategoryItem.SideNavBarBottom") }}
+		                </div>
+
+		            {% endif %}
+		        </div>
+
+            <div class="col-xs-12 col-sm-9 articleContent">
+
+                <div id="twig-rendered-item-list" class="item-list-frame{% if ceresConfig.item.loadingAnimationType == "blur" %} blur-effect{% endif %}">
+
+                    {% if ceresConfig.item.loadingAnimationType != "blur" %}
+                        {% include "Ceres::ItemList.Partials.LoadingAnimation" %}
+                    {% endif %}
+
+                    <ul class="product-list row grid" v-is-loading-watcher="$store.state.itemList.isLoading">
+                        {% for item in itemList %}
+                            <li class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                                {% include "Hermko::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div id="vue-rendered-item-list" style="display:none">
+                    <item-list template="#vue-item-list" :total-items-data="{{ itemCountTotal }}" :category-id="{{ category.id }}"></item-list>
+                </div>
+            </div>
+          {% if ceresConfig.pagination.position in ['top', 'top_bottom'] %}
+            <div class="col-xs-12">
+	            <div class="list-controls m-b-3">
+                    <pagination template="#vue-pagination"></pagination>
+                    <noscript>
+                        {% include "Ceres::Category.Item.Partials.Pagination" %}
+                    </noscript>
+	            </div>
+	        </div>
+	        {% endif %}
+
+        </div>
+        {% if ceresConfig.pagination.position in ['bottom', 'top_bottom'] %}
+            <div class="list-controls m-b-3 row">
+                <div class="col-xs-12">
+                    <pagination template="#vue-pagination"></pagination>
+                    <noscript>
+                        {% include "Ceres::Category.Item.Partials.Pagination" %}
+                    </noscript>
+                </div>
+            </div>
+        {% endif %}
+        <p class="center">
+            * {{ trans("Ceres::Template.itemInclVAT") }} {{ trans("Ceres::Template.itemExclusive") }}
+            <a  href="hermko/versandkosten/" title="{{ trans("Ceres::Template.itemShippingCosts") }}">{{ trans("Ceres::Template.itemShippingCosts") }}</a>
+        </p>
+    </div>
+
+{% endblock %}
+
+{% block PartialHead %}
+    <script type="application/ld+json">{"@context": "http://schema.org","@type": "WebSite","url": "{{ webstoreConfig.domainSsl }}","potentialAction":{"@type": "SearchAction","target": "{{ domainSsl }}/search?query={search_term}","query-input": "required name=search_term"}}</script>
+
+    {% if currentPage-1 > 0 %}
+        <link rel=“prev“ href=“{{ webstoreConfig.domainSsl }}?{{ query | merge({'page' : currentPage-1 }) | url_encode }}“ />
+    {% endif %}
+
+    {% if currentPage+1 <= pageMax %}
+        <link rel=“next“ href=“{{ webstoreConfig.domainSsl }}?{{ query | merge({'page' : currentPage+1 }) | url_encode }}“ />
+    {% endif %}
+
+    <title>{{ category.details[0].metaTitle }}</title>
+
+    <meta name="description" content="{{ category.details[0].metaDescription }}">
+    <meta name="keywords" content="{{ category.details[0].metaKeywords }}">
+
+    <meta name="robots" content="{{ metaRobots }}">
+{% endblock %}

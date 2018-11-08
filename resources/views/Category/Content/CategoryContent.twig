@@ -1,0 +1,25 @@
+{% extends getPartial('page-design') %}
+
+{% block PartialHead %}
+    <title>{{ category.details[0].metaTitle }} | HERMKO.de</title>
+
+    <meta name="description" content="{{ category.details[0].metaDescription }}">
+    <meta name="keywords" content="{{ category.details[0].metaKeywords }}">
+
+    <meta name="robots" content="{{ metaRobots }}">
+{% endblock %}
+
+{% block PageBody %}
+
+    {% include category_template( category.id, lang, webstoreConfig.webstoreId ) ignore missing %}
+
+    {% if categoryDesc is not defined %}
+      {% set categoryDesc = services.category.get( category.id, lang) %}
+    {% endif %}
+
+
+<div class="beschreibung">
+      {{ categoryDesc.details.first.description | raw }}
+  </div>
+
+{% endblock %}
