@@ -1,6 +1,6 @@
 {% extends getPartial('page-design') %}
 
-{% block PageBody %} 
+{% block PageBody %}
 
     {{ component( "Hermko::ItemList.Components.ItemList" ) }}
     {{ component( "Ceres::ItemList.Components.ItemListSorting" ) }}
@@ -11,55 +11,48 @@
     {{ component( "Hermko::ItemList.Components.CategoryItem" ) }}
 
     <div class="categoriegrid page-content container-max">
-        <div class="row m-t-1">
-            <div class="col-xs-12">
-                <h1 class="h2" id="searchPageTitle">{{ trans("Ceres::Template.itemSearchResults") }} {{ searchString }}</h1>
-            </div>
-        </div>
-
-        <div class="list-controls m-b-3">
-            <div class="list-controls-inner">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="list-wrapper">
-                            <item-list-sorting template="#vue-item-list-sorting" :sorting-list="{{ searchOptions.sorting | json_encode }}" :default-sorting="{{ searchOptions.defaultSorting | json_encode }}"></item-list-sorting>
-                            <items-per-page
-                                template="#vue-items-per-page"
-                                :pagination-values="{{ searchOptions.itemsPerPage | json_encode }}"></items-per-page>
-                            {% set overrideSearchFilters = LayoutContainer.show("Ceres::Search.Filter", facets) %}
-                            {% if overrideSearchFilters | trim is empty %}
-                                <item-filter-list :facet-data="{{ facets | json_encode }}"></item-filter-list>
-                            {% else %}
-                                {{ overrideSearchFilters }}
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <item-filter-tag-list></item-filter-tag-list>
-        </div>
-
-        {% if ceresConfig.pagination.position in ['top', 'top_bottom'] %}
-            <div class="list-controls m-b-3 row">
-                <div class="col-xs-12">
-                    <pagination template="#vue-pagination"></pagination>
-                </div>
-            </div>
-        {% endif %}
-
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-sm-3 columnLeft">
+   			        <div class="list-controls">
+   			            <div class="list-controls-inner border">
+   		                    <div class="list-wrapper">
+   		                        <item-list-sorting template="#vue-item-list-sorting" :sorting-list="{{ searchOptions.sorting | json_encode }}" :default-sorting="{{ searchOptions.defaultSorting | json_encode }}"></item-list-sorting>
+   		                        <items-per-page
+   		                            template="#vue-items-per-page"
+   		                            :pagination-values="{{ searchOptions.itemsPerPage | json_encode }}"></items-per-page>
+   			                </div>
+   			            </div>
+   			            <div class="filter border">
+   			            	<item-filter-list :facet-data="{{ facets | json_encode }}"></item-filter-list>
+   			            	<item-filter-tag-list></item-filter-tag-list>
+   			            </div>
+   			            {# TAGS #}
+   			        </div>
 
-                <div id="vue-rendered-item-list" class="item-list-frame">
-                    <item-list
-                        :item-data="{{ itemList | json_encode }}"
-                        :total-items-data="{{ itemCountTotal }}"
-                        template="#vue-item-list">
-                    </item-list>
-                </div>
+   			        {% if ceresConfig.header.showNavBars == "side" or ceresConfig.header.showNavBars == "both" %}
+   		                <div class="hidden-md-down">
+   		                    <div class="sidebar-categories">
+   		                        <div class="category-title">{{ trans("Ceres::Template.generalCategories") }}</div>
+   		                        {{ include('Ceres::PageDesign.Partials.Header.SideNavigation.twig') }}
+   		                    </div>
 
-            </div>
+   		                    {{ LayoutContainer.show("Ceres::CategoryItem.SideNavBarBottom") }}
+   		                </div>
+
+   		            {% endif %}
+   		        </div>
+
+          <div class="col-xs-12 col-sm-9 articleContent">
+              <h1 class="h2" id="searchPageTitle">{{ trans("Ceres::Template.itemSearchResults") }} {{ searchString }}</h1>
+              <div id="vue-rendered-item-list" class="item-list-frame">
+                  <item-list
+                      :item-data="{{ itemList | json_encode }}"
+                      :total-items-data="{{ itemCountTotal }}"
+                      template="#vue-item-list">
+                  </item-list>
+              </div>
+
+          </div>
         </div>
 
         {% if ceresConfig.pagination.position in ['bottom', 'top_bottom'] %}
@@ -69,7 +62,10 @@
                 </div>
             </div>
         {% endif %}
-
+        <p class="center">
+            * {{ trans("Ceres::Template.itemInclVAT") }} {{ trans("Ceres::Template.itemExclusive") }}
+            <a  href="hermko/versandkosten/" title="{{ trans("Ceres::Template.itemShippingCosts") }}">{{ trans("Ceres::Template.itemShippingCosts") }}</a>
+        </p>
     </div>
 
 {% endblock %}

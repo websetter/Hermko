@@ -57,17 +57,16 @@
                 {% include "Hermko::PageDesign.Partials.Header.NavigationList" %}
             {% endif %}
             <ul id="controlsList" class="controls-list list-inline">
-							<li class="list-inline-item control-search">
-                  <a class="anicon anicon-search-xcross"
-                     aria-label="toggle search"
-                     data-toggle="collapse"
-                     href="#searchBox"
-                     aria-expanded="false"
-                     aria-controls="searchBox"
-                     data-parent="#controlsList">
-                      <span class="anicon-search-item" aria-hidden="true"></span>
-                  </a>
-              </li>
+			<li class="list-inline-item control-search">
+                <a class="anicon anicon-search-xcross" aria-label="toggle search"
+                        data-toggle="collapse" href="#searchBox"
+                        aria-expanded="{% if services.template.isSearch() %}true{% else %}false{% endif %}"
+                        aria-controls="searchBox"
+                        data-parent="#controlsList">
+                    <span class="fa fa-search" aria-hidden="true"></span>
+                    Suche
+                </a>
+            </li>
             <li class="list-inline-item control-user">
                 <user-login-handler template="#vue-user-login-handler"
                         :user-data="{{ services.customer.getContact() | json_encode() }}"></user-login-handler>
