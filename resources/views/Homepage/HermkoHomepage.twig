@@ -32,7 +32,7 @@
     {% set categoryList2 = paginatedCategoryList2.documents %}
 
 
-  {{ component( "Ceres::ItemList.Components.ItemList") }}
+  {{ component( "Hermko::ItemList.Components.ItemList") }}
   {{ component( "Ceres::ItemList.Components.CategoryImageCarousel") }}
   {{ component( "Ceres::Basket.Components.AddToBasket" ) }}
 
@@ -93,23 +93,19 @@
       </div>
     </div>
 
+    {% if category is not defined %}
+      {% set categoryStart  = services.category.get(411, lang) %}
+    {% endif %}
 
-      {% set homepageContainer6 = LayoutContainer.show("Ceres::Homepage.Container6") %}
-
-      {% if category is not defined %}
-        {% set categoryStart  = services.category.get(411, lang) %}
-      {% endif %}
-
-      {% if startArtikel is not defined %}
-        {% set startArtikel = services.category.get(412, lang) %}
-      {% endif %}
+    {% if startArtikel is not defined %}
+      {% set startArtikel = services.category.get(412, lang) %}
+    {% endif %}
 
 
-      {{ startArtikel.details.first.description | raw }}
+    {{ startArtikel.details.first.description | raw }}
 
-      {{ startArtikel.details.first.description2 | raw }}
+    {{ startArtikel.details.first.description2 | raw }}
 
-<!--
       {% set homepageContainer6 = LayoutContainer.show("Ceres::Homepage.Container6") %}
       {% if categoryList1 is not empty or homepageContainer6 | trim is not empty %}
           <div class="topProdukte clearfix">
@@ -126,7 +122,7 @@
                     </li>
                       {% for item in categoryList1 %}
                           <li class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                              {% include "Ceres::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
+                              {% include "Hermko::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
                           </li>
                       {% endfor %}
                   </ul>
@@ -153,7 +149,7 @@
                       </li>
                         {% for item in categoryList2 %}
                               <li class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                {% include "Ceres::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
+                                {% include "Hermko::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
                             </li>
                         {% endfor %}
                     </ul>
@@ -163,7 +159,7 @@
             </div>
         {% endif %}
 
--->
+
 
     <div class="SEO">
       {% if category is not defined %}
