@@ -2,7 +2,7 @@
     "version"           :   "1.0.0",
     "license"           :   "AGPL-3.0",
     "name"              :   "Hermko",
-    "marketplaceName"   :   {"de":"Ceres Hermko","en":"Ceres Hermko"},
+    "marketplaceName"   :   {"de":"Hermko","en":"Hermko"},
     "pluginIcon"        :   "icon_plugin_xs.png",
     "description"       :   "Theme für Hermko.",
     "shortDescription"  :   { "de": "Theme für Ceres.", "en": "Theme for Ceres." },
