@@ -1,52 +1,18 @@
-<!-- Insert markup for head here -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script  src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<!--<script src="https://cdn02.plentymarkets.com/lywq02hc1uc5/frontend/hermko_ceres/js/werk38.js"></script>-->
-<script src="https://www.hermko.de/layout/hermko/js/werk38.js"></script>
+<meta name="generator" content="plentymarkets" />
+
 {% set lang = services.sessionStorage.getLang() %}
-{% set favicon = url ~ '/tpl/favicon_' ~ webstoreConfig.webstoreId ~ '.ico' %}
+
+{% if ceresConfig.global.favicon is empty %}
+    {% set favicon = url ~ '/tpl/favicon_' ~ webstoreConfig.webstoreId ~ '.ico' %}
+{% else %}
+    {% set favicon = ceresConfig.global.favicon %}
+{% endif %}
+
 <link rel="icon" type="img/ico" href="{{ favicon }}">
 
-<meta name="google-site-verification" content="OyY-EPYQoW1YeUopHZEUQYlY26yDsiWHL8Bm5ZQsEG8"/>
-		<meta name="google-site-verification" content="7MLgq2wMpfksfn449DlXpXygf1StuOyVHLhjkAAcpys" />
-		<meta name="google-site-verification" content="ZTysvqufP4Z3hyhtO8jE_yo__FbjzlZwA9XJCrF4u9k" />
-		<script>
-			var gaProperty = 'UA-32980941-1';
-			var disableStr = 'ga-disable-' + gaProperty;
-			if (document.cookie.indexOf(disableStr + '=true') > -1) { window[disableStr] = true;
-			}
-			function gaOptout() {
-			document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
-			window[disableStr] = true; }
-		</script>
-
-		<script type="text/javascript">
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', 'UA-32980941-1']);
-		  _gaq.push(['_setDomainName', 'hermko.de']);
-		 _gaq.push (['_gat._anonymizeIp']);
-		  _gaq.push(['_trackPageview']);
-
-		  (function() {
-		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		  })();
-</script>
-    <script type="text/javascript">
-
-			var google_conversion_id = 1003630262;
-			var google_conversion_label = "1xHuCIKM5wQQtt3I3gM";
-			var google_custom_params = window.google_tag_params;
-			var google_remarketing_only = true;
-
-		</script>
-		<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-		</script>
-
-{% set requestUrl = webstoreConfig.domainSsl ~ request.getRequestUri() %}
 {% set canonicalUrl = services.url.getCanonicalURL() %}
 {% set languageUrls = services.url.getLanguageURLs() %}
 
@@ -54,11 +20,51 @@
     <link rel="canonical" href="{{ canonicalUrl }}">
 {% endif %}
 
-{% if canonicalUrl == requestUrl %}
+{% if services.url.isCanonical() %}
     {% for language, url in languageUrls %}
         <link rel="alternate" hreflang="{{language}}" href="{{url}}"/>
     {% endfor %}
 {% endif %}
+
+<style data-font="Custom-Font">
+    {% set customFont =
+        {
+            regular: config('Ceres.custom-font-regular'),
+            bold: config('Ceres.custom-font-bold'),
+            italic: config('Ceres.custom-font-italic'),
+            boldItalic: config('Ceres.custom-font-bold-italic')
+        }
+    %}
+
+    {% if customFont.regular %}
+        @font-face {
+            font-family: "Custom-Font";
+            src: url("{{ customFont.regular }}");
+        }
+    {% endif %}
+    {% if customFont.bold %}
+        @font-face {
+            font-family: "Custom-Font";
+            src: url("{{ customFont.bold }}");
+            font-weight: bold;
+        }
+    {% endif %}
+    {% if customFont.italic %}
+        @font-face {
+            font-family: "Custom-Font";
+            src: url("{{ customFont.italic }}");
+            font-style: italic;
+        }
+    {% endif %}
+    {% if customFont.boldItalic %}
+        @font-face {
+            font-family: "Custom-Font";
+            src: url("{{ customFont.boldItalic }}");
+            font-weight: bold;
+            font-style: italic;
+        }
+    {% endif %}
+</style>
 
 {% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
 
@@ -73,13 +79,16 @@
 {% set itemName = config('Ceres.item.name') %}
 
 {% if LayoutContainer.show("Ceres::Template.StyleOverwrite") | trim is empty %}
-    <link rel="stylesheet" href="{{ plugin_path('Ceres') }}/css/ceres.css" media="screen">
-    <link rel="stylesheet" href="{{ plugin_path('Hermko') }}/css/main.css"  media="screen">
-    <link rel="stylesheet" href="https://www.hermko.de/layout/hermko/css/werk38.css" media="screen">
-    <link rel="stylesheet" href="https://www.hermko.de/layout/hermko/css/print.css" media="print"> 
+    <link data-sass-root="{{ plugin_path('Ceres') }}" data-sass-original="{{ plugin_path('Ceres') }}/css/ceres.scss" media="screen" rel="stylesheet" href="{{ plugin_path('Ceres') }}/css/ceres.css">
 {% endif %}
+
+<link rel="stylesheet" href="https://www.hermko.de/layout/hermko/css/werk38.css" media="screen">
+<link rel="stylesheet" href="https://www.hermko.de/layout/hermko/css/print.css" media="print"> 
 
 {{ LayoutContainer.show("Ceres::Template.StyleOverwrite") }}
 
 <!-- Extend the existing style with a template -->
 {{ LayoutContainer.show("Ceres::Template.Style") }}
+
+<script  src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://www.hermko.de/layout/hermko/js/werk38.js"></script>
