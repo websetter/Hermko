@@ -97,38 +97,50 @@
       {% set categoryStart  = services.category.get(411, lang) %}
     {% endif %}
 
-    {% if startArtikel is not defined %}
-      {% set startArtikel = services.category.get(412, lang) %}
-    {% endif %}
-
-
-    {{ startArtikel.details.first.description | raw }}
-
-    {{ startArtikel.details.first.description2 | raw }}
-
-
     <div class="row">
             {% set count = 1 %}
-            <div class="col-xs-12 col-sm-6 col-md-4 startArt">
+            <div class="col-xs-12 col-sm-6 col-md-3 startArt">
               <div class="border">
                 <h2>Top Produkte</h2>
                 <div class="category-description">
-                    <p>test</p>
+                  {{ categoryStart.details.first.description | raw }}
                 </div>
               </div>
             </div>
             {% for curCat in categories %}
               {% set itemList = services.itemList.getItemList( 'category', curCat.id, null, 1000 ).documents %}
                 {% for item in itemList %}
-                  {% if  item.data.item.storeSpecial.id == 3 and count <= 3 %}
-                    <div class="col-xs-12 col-sm-6 col-md-4 startArt">
+                  {% if  item.data.item.storeSpecial.id == 3 and count <= 4 %}
+                    <div class="col-xs-12 col-sm-6 col-md-3 startArt">
                         {% include "Hermko::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
                     </div>
                     {% set count = count + 1 %}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
-          </div>
+        </div>
+    <div class="row">
+            {% set count2 = 1 %}
+            <div class="col-xs-12 col-sm-6 col-md-3 startArt">
+              <div class="border">
+                <h2>Neue Produkte</h2>
+                <div class="category-description">
+                  {{ categoryStart.details.first.description2 | raw }}
+                </div>
+              </div>
+            </div>
+            {% for curCat2 in categories %}
+              {% set itemList2 = services.itemList.getItemList( 'category', curCat2.id, null, 1000 ).documents %}
+                {% for item2 in itemList2 %}
+                  {% if  item2.data.item.storeSpecial.id == 2 and count2 <= 4 %}
+                    <div class="col-xs-12 col-sm-6 col-md-3 startArt">
+                        {% include "Hermko::Category.Item.Partials.CategoryListItem" with { 'item': item2 } %}
+                    </div>
+                    {% set count2 = count2 + 1 %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
 
 
 
