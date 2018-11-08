@@ -1,6 +1,6 @@
 <script type="x/template" id="vue-item-filter-list">
     <div class="filter-wrapper" v-show="facets && facets.length > 0">
-        {{ component( "Ceres::ItemList.Components.Filter.ItemFilter") }}
+        {{ component( "Hermko::ItemList.Components.Filter.ItemFilter") }}
         {{ component( "Ceres::ItemList.Components.Filter.ItemFilterPrice") }}
 
         <h2>Filter</h2>
@@ -9,7 +9,7 @@
             <div class="container-max page-content">
                 <div class="card-columns">
                     <item-filter v-for="facet in facets" :facet="facet" :key="facet.id"></item-filter>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
