@@ -13,6 +13,12 @@
     <div class="categoriegrid page-content container-max">
         <div class="row">
             <div class="col-xs-12 col-sm-3 columnLeft">
+              <div class="border catDesc">
+                <h1 class="h2 category-title">Suche</h1>
+                    <div id="category-description-container" class="category-description m-b-1">{
+                      <h2>{{ trans("Ceres::Template.itemSearchResults") }}<br>{{ searchString }}</h2>                      
+                    </div>
+              </div>
    			        <div class="list-controls">
    			            <div class="list-controls-inner border">
    		                    <div class="list-wrapper">
@@ -43,7 +49,6 @@
    		        </div>
 
           <div class="col-xs-12 col-sm-9 articleContent">
-              <h1 class="h2" id="searchPageTitle">{{ trans("Ceres::Template.itemSearchResults") }} {{ searchString }}</h1>
               <div id="vue-rendered-item-list" class="item-list-frame">
                   <item-list
                       :item-data="{{ itemList | json_encode }}"

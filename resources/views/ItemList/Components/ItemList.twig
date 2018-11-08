@@ -18,8 +18,7 @@
         {% endif %}
 
         <ul class="product-list row grid">
-            <li v-for="item in items" :key="item.data.variation.id" class="col-xs-12 col-sm-6 col-md-6 col-lg-{% if isSearch %}3{% else %}4{% endif %}">
-            {% if isSearch %} {% endif %}
+            <li v-for="item in items" :key="item.data.variation.id" class="col-xs-12 col-sm-6 col-md-6 col-lg-{% if isSearch %}3{% else %}4{% endif %}">            
             <div class="border outsideArticle test">
                 <category-item :item-data="item.data" decimal-count="{{ decimalCount }}" image-url-accessor="urlMiddle"></category-item>
                 </div>
