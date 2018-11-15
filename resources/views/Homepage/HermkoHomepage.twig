@@ -142,64 +142,6 @@
             {% endfor %}
         </div>
 
-
-
-<!--      {% set homepageContainer6 = LayoutContainer.show("Ceres::Homepage.Container6") %}
-      {% if categoryList1 is not empty or homepageContainer6 | trim is not empty %}
-          <div class="topProdukte clearfix">
-              {% if homepageContainer6 | trim is empty %}
-
-                  <ul class="product-list  grid">
-                    <li class="first col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                      <div class="border">
-                        <h2>Top Produkte</h2>
-                        <div class="category-description">
-                            {{ categoryStart.details.first.description | raw }}
-                        </div>
-                      </div>
-                    </li>
-                      {% for item in categoryList1 %}
-                          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                              {% include "Hermko::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
-                          </li>
-                      {% endfor %}
-                  </ul>
-              {% else %}
-                  {{ homepageContainer6 }}
-              {% endif %}
-          </div>
-      {% endif %}
-
-        {% set homepageContainer9 = LayoutContainer.show("Ceres::Homepage.Container9") %}
-        {% if categoryList2 is not empty or homepageContainer9 | trim is not empty %}
-            <div class="neuheiten clearfix">
-                {% if homepageContainer9 | trim is empty %}
-
-
-                    <ul class="product-list grid">
-                      <li class="first col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                        <div class="border">
-                          <h2>Neue Produkte</h2>
-                          <div class="category-description">
-                              {{ categoryStart.details.first.description2 | raw }}
-                          </div>
-                        </div>
-                      </li>
-                        {% for item in categoryList2 %}
-                              <li class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                {% include "Hermko::Category.Item.Partials.CategoryListItem" with { 'item': item } %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    {{ homepageContainer9 }}
-                {% endif %}
-            </div>
-        {% endif %}
-      -->
-
-
-
     <div class="SEO">
       {% if category is not defined %}
         {% set lang = services.sessionStorage.getLang() %}
