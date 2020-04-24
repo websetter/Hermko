@@ -12,13 +12,13 @@ use IO\Helper\TemplateContainer;
 use IO\Extensions\Functions\Partial;
 use Plenty\Plugin\ConfigRepository;
 use Hermko\Contexts\MyContext;
-
+use Plenty\Modules\Webshop\Template\Providers\TemplateServiceProvider;
 
 /**
  * Class HermkoServiceProvider
  * @package Hermko\Providers
  */
-class HermkoServiceProvider extends ServiceProvider
+class HermkoServiceProvider extends TemplateServiceProvider
 {
     const PRIORITY = 0;
 
@@ -31,6 +31,8 @@ class HermkoServiceProvider extends ServiceProvider
     {
 
         $enabledOverrides = explode(", ", $config->get("Hermko.templates.override"));
+
+        $this->overrideTemplate("Ceres::Customer.Components.AddressSelect.AddressHeader", "Hermko::Customer.Components.AddressSelect.AddressHeader");
 
 
         $dispatcher->listen('IO.ctx.item', function (TemplateContainer $templateContainer, $templateData = [])
